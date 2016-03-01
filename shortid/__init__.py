@@ -1,9 +1,6 @@
 import base64
 import os
-
-# Should change every year with VERSION
-# TODO: Automate it
-VERSION = 3
+import random
 
 
 def shortid(nb_bytes=6):
@@ -12,8 +9,13 @@ def shortid(nb_bytes=6):
 
 
 class ShortId(object):
-    def __init__(self, nb_bytes=6):
-        self.nb_bytes = nb_bytes
+    # From 7 to 14 characters: Up to 64^7 + 64^8 + ... + 64^14
+    def __init__(self, min_bytes=5, max_bytes=10):
+        self.min_bytes = min_bytes
+        self.max_bytes = max_bytes
 
-    def generate(self):
-        return shortid(self.nb_bytes)
+    def generate(self, nb_bytes=None):
+        if not nb_bytes:
+            random.seed = os.urandom(1024)
+            nb_bytes = random.randint(self.min_bytes, self.max_bytes)
+        return shortid(nb_bytes)
